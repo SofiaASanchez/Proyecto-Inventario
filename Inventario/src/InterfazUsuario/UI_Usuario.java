@@ -48,6 +48,7 @@ public class UI_Usuario extends javax.swing.JFrame {
                            "FROM public.usuarios where id='"+seleccion()+"';";
             
             ResultSet rs = st.executeQuery(orden);
+            DatosUsuario.setId(seleccion());
             rs.next();
             //DatosUsuario.id(seleccion());
            
@@ -59,9 +60,10 @@ public class UI_Usuario extends javax.swing.JFrame {
            UI_UsuarioMod.txt_contra.setText(rs.getString("contra"));
            UI_UsuarioMod.txt_repitcontra.setText(rs.getString("contra"));
            UI_UsuarioMod.txt_telefono.setText(rs.getString("telefono"));
-           UI_UsuarioMod.txt_permiso.setText(rs.getString("tipopermiso"));
+           UI_UsuarioMod.txt_permiso.setText(rs.getString("tipoPermiso"));
            UI_UsuarioMod.txt_direccion.setText(rs.getString("direccion"));
-           if(rs.getString("tipoPermiso")=="1"){
+           
+           if(rs.getString("tipoPermiso").equals("1")){
                UI_UsuarioMod.txt_nameP.setText("Gerente");
            }else{
                UI_UsuarioMod.txt_nameP.setText("Vendedor");

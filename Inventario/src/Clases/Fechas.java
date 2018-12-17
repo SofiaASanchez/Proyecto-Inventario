@@ -42,7 +42,7 @@ public class Fechas {
             
             FileOutputStream archivo;
             PrintStream p;          
-            archivo= new FileOutputStream(nombreF+".txt");
+            archivo= new FileOutputStream("Factura "+nombreF+".txt");
             p= new PrintStream(archivo);
             p.append("\r\n");
             p.println(texto);

@@ -7,6 +7,7 @@ import InterfazInventario.UI_Catalogo;
 import InterfazVentas.UI_Cliente;
 import InterfazInventario.UI_Inventario;
 import InterFazLogIn.UI_Login;
+import InterFazFactura.UI_Factura;
 import InterfazProveedor.UI_Proveedor;
 import InterfazUsuario.UI_Usuario;
 import javax.swing.JOptionPane;
@@ -25,15 +26,15 @@ public class UI_Menu extends javax.swing.JFrame {
         btnUsuarios.setEnabled(false);
         btnProveedor.setEnabled(false);
         btnProducto.setEnabled(false);
-        btningreso_producto.setEnabled(false);
-        btnegreso_producto.setEnabled(false);
+        //btningreso_producto.setEnabled(false);
+        btnfactura.setEnabled(false);
         
         if (txt_Tipo.getText().equals("Gerente")){
             btnUsuarios.setEnabled(true);
             btnProveedor.setEnabled(true);
             btnProducto.setEnabled(true);
-            btningreso_producto.setEnabled(true);
-            btnegreso_producto.setEnabled(true);
+            //btningreso_producto.setEnabled(true);
+            btnfactura.setEnabled(true);
         }
     }
     public void datosUsuario(){
@@ -60,8 +61,7 @@ public class UI_Menu extends javax.swing.JFrame {
         btnCatalogo = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        btnegreso_producto = new javax.swing.JButton();
-        btningreso_producto = new javax.swing.JButton();
+        btnfactura = new javax.swing.JButton();
         btnsalir_menu = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -210,14 +210,11 @@ public class UI_Menu extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jLabel3.setText("Registros");
 
-        btnegreso_producto.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        btnegreso_producto.setText("Egreso de Producto");
-
-        btningreso_producto.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        btningreso_producto.setText("Ingreso de Producto");
-        btningreso_producto.addActionListener(new java.awt.event.ActionListener() {
+        btnfactura.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        btnfactura.setText("Registro Factura");
+        btnfactura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btningreso_productoActionPerformed(evt);
+                btnfacturaActionPerformed(evt);
             }
         });
 
@@ -239,8 +236,7 @@ public class UI_Menu extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btningreso_producto, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
-                    .addComponent(btnegreso_producto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnfactura, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
                     .addComponent(btnsalir_menu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -249,10 +245,8 @@ public class UI_Menu extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btningreso_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnegreso_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnfactura, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnsalir_menu, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -321,10 +315,6 @@ public class UI_Menu extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnProductoActionPerformed
 
-    private void btningreso_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btningreso_productoActionPerformed
-      
-    }//GEN-LAST:event_btningreso_productoActionPerformed
-
     private void btnProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedorActionPerformed
 
          UI_Proveedor fram = new UI_Proveedor();
@@ -348,6 +338,14 @@ public class UI_Menu extends javax.swing.JFrame {
         
         dispose();
     }//GEN-LAST:event_btnVentasActionPerformed
+
+    private void btnfacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnfacturaActionPerformed
+        UI_Factura fram = new UI_Factura();
+       fram.setVisible(true);
+       fram.setLocationRelativeTo(null);
+        
+        dispose();
+    }//GEN-LAST:event_btnfacturaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -391,8 +389,7 @@ public class UI_Menu extends javax.swing.JFrame {
     private javax.swing.JButton btnProveedor;
     private javax.swing.JButton btnUsuarios;
     private javax.swing.JButton btnVentas;
-    private javax.swing.JButton btnegreso_producto;
-    private javax.swing.JButton btningreso_producto;
+    private javax.swing.JButton btnfactura;
     private javax.swing.JButton btnsalir_menu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

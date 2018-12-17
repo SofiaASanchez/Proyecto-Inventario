@@ -8,7 +8,7 @@ import java.sql.*;
 
 public class VerificarUsuario {
 
-    private String nombre;
+    private String id;
     private String contra;
     
     public VerificarUsuario() {
@@ -16,12 +16,12 @@ public class VerificarUsuario {
     }
     
     
-    public VerificarUsuario(String nombre, String contra) {
-        this.nombre=nombre;
+    public VerificarUsuario(String id, String contra) {
+        this.id=id;
         this.contra=contra;
     }
 
-    public int tipoUsuario(String nombre, String contra){
+    public int tipoUsuario(String id, String contra){
     
     int tipo=0;
     
@@ -30,7 +30,7 @@ public class VerificarUsuario {
         
         try{
            // Connection conex = DriverManager.getConnection("jdbc:postgresql://localhost:5432/inventarios", "postgres", "123");
-            PreparedStatement datos = conex.prepareStatement("Select \"tipoPermiso\" from usuarios where nombre ='"+nombre+"' And contra='"+contra+"'");
+            PreparedStatement datos = conex.prepareStatement("Select \"tipoPermiso\" from usuarios where id ='"+id+"' And contra='"+contra+"'");
             ResultSet rs = datos.executeQuery();
             rs.next();
           
@@ -47,18 +47,18 @@ public class VerificarUsuario {
     return tipo;
 }
  
-    public int validarUsuario(String nom, String cont){
+    public int validarUsuario(String id, String cont){
         ConexionBD enlace = new ConexionBD();
         Connection conex = enlace.conexion();
         int dec=0;
         
         try{
            // Connection conex = DriverManager.getConnection("jdbc:postgresql://localhost:5432/inventarios", "postgres", "123");
-            PreparedStatement datos = conex.prepareStatement("SELECT contra, nombre FROM usuarios WHERE contra='"+cont+"'");
+            PreparedStatement datos = conex.prepareStatement("SELECT contra, id FROM usuarios WHERE contra='"+cont+"'");
             ResultSet rs = datos.executeQuery();
             rs.next();
             
-          if(rs.getString("nombre").equals(nom)){
+          if(rs.getString("id").equals(id)){
               dec=1;
           }else{
               dec=0;

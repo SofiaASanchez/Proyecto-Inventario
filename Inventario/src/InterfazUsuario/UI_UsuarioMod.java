@@ -178,7 +178,7 @@ public class UI_UsuarioMod extends javax.swing.JFrame {
         });
 
         btncancelar_regu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        btncancelar_regu.setText("Cancelar");
+        btncancelar_regu.setText("Atras");
         btncancelar_regu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btncancelar_reguActionPerformed(evt);
@@ -400,9 +400,14 @@ public class UI_UsuarioMod extends javax.swing.JFrame {
            
            JOptionPane.showMessageDialog(null, mensaje);
            
+           UI_Usuario fram = new UI_Usuario();
+       fram.setVisible(true);
+       fram.setLocationRelativeTo(null);
+       dispose();
+           
        }else{
            
-           txt_contra.setText("");
+           //txt_contra.setText("");
            txt_repitcontra.setText("");
            JOptionPane.showMessageDialog(null, "Contraseña no coinciden");
            

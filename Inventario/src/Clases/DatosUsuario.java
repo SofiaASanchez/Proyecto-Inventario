@@ -39,6 +39,10 @@ public class DatosUsuario {
     public static String getIdProducto() {
         return idProducto;
     }
+
+    public static void setId(String id) {
+        DatosUsuario.id = id;
+    }
     
     
     

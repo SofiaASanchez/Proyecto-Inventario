@@ -53,7 +53,7 @@ public class UI_Login extends javax.swing.JFrame {
         });
 
         lblusuario.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        lblusuario.setText("Nombre de usuario:");
+        lblusuario.setText("ID de usuario:");
 
         lblcontraseña.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         lblcontraseña.setText("Contraseña");
@@ -135,17 +135,17 @@ public class UI_Login extends javax.swing.JFrame {
     private void bt_ingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ingresarActionPerformed
         
         VerificarUsuario conex = new VerificarUsuario();
-        String nombre="";
         String id="";
+        String contra="";
         String mensaje="";
         int dec;
         int tipo;
         
-        nombre=txt_usuario.getText();
-        id = txt_contra.getText();
+        id=txt_usuario.getText();
+        contra = txt_contra.getText();
         
-        dec = conex.validarUsuario(nombre, id);
-        tipo = conex.tipoUsuario(nombre, id);
+        dec = conex.validarUsuario(id, contra);
+        tipo = conex.tipoUsuario(id, contra);
         
         if(tipo==1){
                 mensaje="Gerente";
@@ -157,7 +157,7 @@ public class UI_Login extends javax.swing.JFrame {
             UI_Menu fram = new UI_Menu();
             UI_Menu.txt_Tipo.setText(mensaje); 
             UI_Menu.txt_Usuario.setText(txt_usuario.getText());
-            DatosUsuario.datos(nombre, mensaje);
+            DatosUsuario.datos(id, mensaje);
             fram.setVisible(true);
             fram.setLocationRelativeTo(null);
             fram.botones();
@@ -175,11 +175,7 @@ public class UI_Login extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_salirActionPerformed
 
     private void txt_usuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_usuarioKeyTyped
-        char numeros = evt.getKeyChar();
-         if(Character.isDigit(numeros)){
-             getToolkit().beep();
-             evt.consume();
-         }
+        
     }//GEN-LAST:event_txt_usuarioKeyTyped
 
     /**

@@ -62,7 +62,7 @@ public class BdOption {
         try {
             Statement st = conex.createStatement();
             String orden = "UPDATE usuarios\n" +
-"	SET id="+datos.getId_persona()+", nombre="+datos.getNombre()+", apellido ="+datos.getApellido()+", direccion= "+datos.getDireccion()+", telefono="+datos.getTelefono()+", fecha_naci="+datos.getFecha_nacimiento()+",contra="+datos.getContrasena()+", \"tipoPermiso\"="+datos.getTipo_usuario()
+"	SET id="+datos.getId_persona()+", nombre="+datos.getNombre()+", apellido ="+datos.getApellido()+", direccion= "+datos.getDireccion()+", telefono="+datos.getTelefono()+", \"fecha_Naci\"="+datos.getFecha_nacimiento()+",contra="+datos.getContrasena()+", \"tipoPermiso\"="+datos.getTipo_usuario()
                     + "	WHERE id="+id+";";
             //System.out.print(orden);
                     
@@ -159,22 +159,22 @@ public class BdOption {
             
             Statement con = conex.createStatement();
             String orden="INSERT INTO public.factura(\n" +
-                          "fecha, cliente, articulos, total, rtn)\n" +
+                          "fecha, nombre, productos, total, rtn)\n" +
                           "VALUES ('"+factura.getFecha()+"','"+factura.getNombrecliente()+"','"+factura.getArticulos()+"' ,'"+factura.getTotal()+"', '"+factura.getRtn()+"' );";
             
             con.executeUpdate(orden);
-            JOptionPane.showMessageDialog(null, "Guardado Con EXITO");
+            //JOptionPane.showMessageDialog(null, "Guardado Con EXITO");
             
-            orden = "SELECT numerofactura \n" +
-                           "FROM public.factura WHERE cliente='"+factura.getNombrecliente()+"';";
+            orden = "SELECT numfac \n" +
+                           "FROM public.factura WHERE nombre='"+factura.getNombrecliente()+"';";
             
             ResultSet rs = con.executeQuery(orden);
             rs.next();
-            mensaje =rs.getString("numerofactura");
+            mensaje =rs.getString("numfac");
           
         }catch(Exception e){
             
-            JOptionPane.showMessageDialog(null, "Guardado Con EXITO");
+            JOptionPane.showMessageDialog(null, e);
         }
         
         return mensaje;
@@ -201,5 +201,74 @@ public class BdOption {
         
         return mensaje;
        
+    }
+    
+    public void restaBD(String idP, String cant ){
+        Connection conex = enlace.conexion();
+        /*SELECT cantidad
+	  FROM public.producto WHERE id_producto ='00012';*/
+        int total;
+        try {
+            
+            Statement st1 = conex.createStatement();
+            String orden1="SELECT cantidad\n" +
+"	  FROM public.producto WHERE id_producto ='"+idP+"';";
+           
+            ResultSet rs1 = st1.executeQuery(orden1);
+            rs1.next();
+            
+            int cantB = Integer.parseInt(rs1.getString("cantidad"));
+            int cantV = Integer.parseInt(cant);
+            
+            total=cantB-cantV;
+             Ac(total, idP);
+            
+            
+        } catch (Exception e) {
+        }
+       
+   
+    } 
+    public void sumaBD(String idP,String cant){
+        Connection conex = enlace.conexion();
+        /*SELECT cantidad
+	  FROM public.producto WHERE id_producto ='00012';*/
+        int total;
+        try {
+            
+            Statement st1 = conex.createStatement();
+            String orden1="SELECT cantidad\n" +
+"	  FROM public.producto WHERE id_producto ='"+idP+"';";
+           
+            ResultSet rs1 = st1.executeQuery(orden1);
+            rs1.next();
+            
+            int cantB = Integer.parseInt(rs1.getString("cantidad"));
+            int cantV = Integer.parseInt(cant);
+            
+            total=cantB+cantV;
+             Ac(total, idP);
+            
+            
+        } catch (Exception e) {
+        }
+    }
+    public void Ac(int total, String idP){
+        try {
+            Connection conex = enlace.conexion();
+                Statement st = conex.createStatement();           
+                String orden = "UPDATE public.producto\n" +
+                        "	SET  cantidad="+total+"\n" +
+                        "	WHERE id_producto = '"+idP+"';";
+            //System.out.print(orden);
+                    
+
+            ResultSet rs = st.executeQuery(orden);
+     
+        } catch (SQLException e) {
+            
+            //System.out.print(e);
+            //JOptionPane.showMessageDialog(null, e);
+        }
     }
 }

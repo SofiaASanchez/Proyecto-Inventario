@@ -25,6 +25,7 @@ public class UI_Ventas extends javax.swing.JFrame {
 
     DefaultTableModel modelo= new DefaultTableModel();
     ConexionBD enlace = new ConexionBD();
+    BdOption conex = new BdOption();
     Object[] obj = new Object[5];
     String articulos="";
     String datosFa= "";
@@ -77,8 +78,15 @@ public class UI_Ventas extends javax.swing.JFrame {
     public String seleccion(){
        
         String idSelec = table_bodega.getValueAt(table_bodega.getSelectedRow(),0).toString();
-   
-        
+        return idSelec;
+    }
+    public String seleccionCant(){
+         String cantSelec = table_venta.getValueAt(table_venta.getSelectedRow(),3).toString();
+         return cantSelec;
+    }
+    public String seleccionId(){
+       
+        String idSelec = table_venta.getValueAt(table_venta.getSelectedRow(),0).toString();
         return idSelec;
     }
     
@@ -95,19 +103,19 @@ public class UI_Ventas extends javax.swing.JFrame {
                 double numero = Double.parseDouble(table_venta.getValueAt(f, 4).toString());
                 articulos =articulos+table_venta.getValueAt(f, 1)+", ";
                 total=total+numero;
-                nombreP =nombreP + table_venta.getValueAt(f, 1)+"..........................................."+table_venta.getValueAt(f, 4).toString()+"\r\n";
+                nombreP =nombreP + table_venta.getValueAt(f, 1)+"....."+table_venta.getValueAt(f, 3)+"......................................"+table_venta.getValueAt(f, 4).toString()+"\r\n";
             } catch (Exception e) {
             }
             
         } while (recorre<tabla);
         
         txt_SubTo.setText(String.valueOf(total));
-        this.impuestos =total*0.15;
-        this.totalPago =this.impuestos+total;
+        double impuestos =total*0.15;
+        this.totalPago =impuestos+total;
         this.articulos = articulos;
         this.datosFa=nombreP;
         txt_SubTo.setText(String.valueOf(total));
-        txt_isv.setText(String.valueOf(this.impuestos));
+        txt_isv.setText(String.valueOf(impuestos));
         txt_PagoTot.setText(String.valueOf(this.totalPago));
         
     }
@@ -150,13 +158,13 @@ public class UI_Ventas extends javax.swing.JFrame {
         
          try {
             Statement st = conex.createStatement();
-            String orden = "SELECT numerofactura FROM public.factura";
+            String orden = "SELECT numfac FROM public.factura";
             
             ResultSet rs = st.executeQuery(orden);
             
             while(rs.next()){
-                if(rs.getString("numerofactura")!=null){
-                    int numf = 1+Integer.parseInt(rs.getString("numerofactura"));
+                if(rs.getString("numfac")!=null){
+                    int numf = 1+Integer.parseInt(rs.getString("numfac"));
                     String ultimaF = String.valueOf(numf);
                     return ultimaF;
                 }else{
@@ -172,7 +180,29 @@ public class UI_Ventas extends javax.swing.JFrame {
          return "1";
     }
   
-    
+    public int obtenerCantidadB(){
+    Connection conex = enlace.conexion();
+       int cant = 0;
+
+         try {
+            Statement st = conex.createStatement();
+            String orden = "SELECT cantidad FROM public.producto \n"+
+                    "WHERE id_producto='"+seleccion()+"';";
+            
+            ResultSet rs = st.executeQuery(orden);
+            
+            
+            
+            rs.next();
+            cant = Integer.parseInt(rs.getString("cantidad"));
+            return cant;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UI_Inventario.class.getName()).log(Level.SEVERE, null, ex);
+            return cant;
+        }
+        
+}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -186,7 +216,7 @@ public class UI_Ventas extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         txt_Buscador = new javax.swing.JTextField();
         cantP = new javax.swing.JSpinner();
-        jButton1 = new javax.swing.JButton();
+        btnagregar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         btnsalir = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
@@ -207,8 +237,8 @@ public class UI_Ventas extends javax.swing.JFrame {
         txt_isv = new javax.swing.JLabel();
         txt_PagoTot = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnborrar = new javax.swing.JButton();
+        btnimprimir = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txt_fecha = new javax.swing.JLabel();
@@ -246,16 +276,21 @@ public class UI_Ventas extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         jLabel7.setText("Buscar");
 
+        txt_Buscador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_BuscadorActionPerformed(evt);
+            }
+        });
         txt_Buscador.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txt_BuscadorKeyTyped(evt);
             }
         });
 
-        jButton1.setText("Agregar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnagregar.setText("Agregar");
+        btnagregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnagregarActionPerformed(evt);
             }
         });
 
@@ -269,10 +304,10 @@ public class UI_Ventas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txt_Buscador, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(btnagregar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cantP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(cantP)
+                .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -281,7 +316,7 @@ public class UI_Ventas extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txt_Buscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
+                    .addComponent(btnagregar)
                     .addComponent(cantP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(121, Short.MAX_VALUE))
         );
@@ -294,17 +329,17 @@ public class UI_Ventas extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(java.awt.SystemColor.controlLtHighlight);
@@ -440,17 +475,17 @@ public class UI_Ventas extends javax.swing.JFrame {
 
         jLabel6.setText("Total");
 
-        jButton2.setText("Eliminar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnborrar.setText("Eliminar");
+        btnborrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnborrarActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Imprimir");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnimprimir.setText("Imprimir");
+        btnimprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnimprimirActionPerformed(evt);
             }
         });
 
@@ -476,9 +511,9 @@ public class UI_Ventas extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2)
+                .addComponent(btnborrar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(btnimprimir)
                 .addGap(21, 21, 21))
         );
         jPanel6Layout.setVerticalGroup(
@@ -487,11 +522,11 @@ public class UI_Ventas extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton2))
+                        .addComponent(btnborrar))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
-                        .addComponent(jButton3)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                        .addComponent(btnimprimir)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txt_SubTo, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
@@ -514,7 +549,7 @@ public class UI_Ventas extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
@@ -522,7 +557,7 @@ public class UI_Ventas extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -586,9 +621,9 @@ public class UI_Ventas extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(40, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -625,27 +660,38 @@ public class UI_Ventas extends javax.swing.JFrame {
         
     }//GEN-LAST:event_txt_BuscadorKeyTyped
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
         
      
-        if((table_bodega.getSelectedRow()!= -1)&&(Integer.parseInt(cantP.getValue().toString())!= 0 )){
-          agregarVenta();
-          letrasFactura();
+        if((table_bodega.getSelectedRowCount()>0)&&(Integer.parseInt(cantP.getValue().toString())!= 0)){
+            int venta = Integer.parseInt(cantP.getValue().toString());
+            if(venta<=obtenerCantidadB()){
+          
+                agregarVenta();
+                letrasFactura();
+          
+          conex.restaBD(seleccion(), cantP.getValue().toString());
+          mostrarTablaBodega();
+          cantP.setValue(0);
+            }
         }else{
-            JOptionPane.showMessageDialog(null, "Falto seleccionar articulo o agregar cantidad ");
-        }
+                JOptionPane.showMessageDialog(null, "Seleccione articulo y verifique \n"+
+                    "que hay producto en bodega");
+            }
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnagregarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnborrarActionPerformed
           if(table_venta.getSelectedRow()!= -1){
+             conex.sumaBD(seleccionId(), seleccionCant());
             modelo.removeRow(table_venta.getSelectedRow());
              letrasFactura();
+             mostrarTablaBodega();
         }else{
             JOptionPane.showMessageDialog(null, "Seleccione articulo a eliminar");
            
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnborrarActionPerformed
 
     private void btnsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsalirActionPerformed
         UI_Menu fram = new UI_Menu();
@@ -655,15 +701,22 @@ public class UI_Ventas extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnsalirActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
-        
-       
+    private void btnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnimprimirActionPerformed
             Factura factura = new Factura(txt_cliente.getText(), Fechas.fechaBD(), this.articulos,this.totalPago, txt_rtn.getText());
             BdOption enlace = new BdOption();
             String mensaje = enlace.ingresarFactura(factura);
-            Factura.formatofactura(datosFa, String.valueOf(this.totalPago),txt_cliente.getText(), txt_rtn.getText() , Fechas.fechaBD(), numFactura());
-    }//GEN-LAST:event_jButton3ActionPerformed
+            Factura.formatofactura(datosFa, String.valueOf(this.totalPago),txt_cliente.getText(), txt_rtn.getText() , Fechas.fechaBD(), mensaje);
+           UI_Cliente fram = new UI_Cliente();
+       fram.setVisible(true);
+       fram.setLocationRelativeTo(null);
+        
+        dispose();
+            
+    }//GEN-LAST:event_btnimprimirActionPerformed
+
+    private void txt_BuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_BuscadorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_BuscadorActionPerformed
 
     
     public static void main(String args[]) {
@@ -700,11 +753,11 @@ public class UI_Ventas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnagregar;
+    private javax.swing.JButton btnborrar;
+    private javax.swing.JButton btnimprimir;
     private javax.swing.JButton btnsalir;
     private javax.swing.JSpinner cantP;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
