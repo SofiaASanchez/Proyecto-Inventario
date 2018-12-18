@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -92,7 +93,7 @@ public class UI_Ventas extends javax.swing.JFrame {
     
     public void letrasFactura(){
         double total= 0;
-          String nombreP="";
+        String nombreP="";
         String articulos="";
         txt_SubTo.setText("0");
         int tabla = table_venta.getRowCount();
@@ -103,7 +104,9 @@ public class UI_Ventas extends javax.swing.JFrame {
                 double numero = Double.parseDouble(table_venta.getValueAt(f, 4).toString());
                 articulos =articulos+table_venta.getValueAt(f, 1)+", ";
                 total=total+numero;
-                nombreP =nombreP + table_venta.getValueAt(f, 1)+"....."+table_venta.getValueAt(f, 3)+"......................................"+table_venta.getValueAt(f, 4).toString()+"\r\n";
+                double isv = Integer.parseInt(table_venta.getValueAt(f, 4).toString())*0.15;
+                nombreP =nombreP + table_venta.getValueAt(f, 1)+".."+table_venta.getValueAt(f, 3)+"......................................"
+                        +table_venta.getValueAt(f, 4).toString()+"...ISV.."+String.format("%.2f",isv)+"\r\n";
             } catch (Exception e) {
             }
             
@@ -138,16 +141,13 @@ public class UI_Ventas extends javax.swing.JFrame {
             
             ResultSet rs = st.executeQuery(orden);
             
-            modelo.setColumnIdentifiers(new Object[]{"ID", "Nombre", "Precio c/u","Cantidad",  "Total"});
+            modelo.setColumnIdentifiers(new Object[]{"ID", "Nombre", "Precio c/u","Cantidad", "Total"});
             
             rs.next();
             int totalA = (Integer.parseInt(rs.getString("precio"))*(Integer.parseInt(cantP.getValue().toString())));
             modelo.addRow(new Object[]{rs.getString("id_producto"), rs.getString("nombre"), rs.getString("precio"), cantP.getValue().toString(),Integer.toString(totalA) });
             
             table_venta.setModel(modelo);
-            
-            
-            
         } catch (SQLException ex) {
             Logger.getLogger(UI_Inventario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -171,15 +171,12 @@ public class UI_Ventas extends javax.swing.JFrame {
                     return "1";
                 }
             }
-            
-            
-            
         } catch (SQLException ex) {
             Logger.getLogger(UI_Inventario.class.getName()).log(Level.SEVERE, null, ex);
         }
          return "1";
     }
-  
+    
     public int obtenerCantidadB(){
     Connection conex = enlace.conexion();
        int cant = 0;
@@ -190,9 +187,6 @@ public class UI_Ventas extends javax.swing.JFrame {
                     "WHERE id_producto='"+seleccion()+"';";
             
             ResultSet rs = st.executeQuery(orden);
-            
-            
-            
             rs.next();
             cant = Integer.parseInt(rs.getString("cantidad"));
             return cant;
@@ -213,8 +207,6 @@ public class UI_Ventas extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         table_bodega = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        txt_Buscador = new javax.swing.JTextField();
         cantP = new javax.swing.JSpinner();
         btnagregar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -273,20 +265,6 @@ public class UI_Ventas extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(table_bodega);
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
-        jLabel7.setText("Buscar");
-
-        txt_Buscador.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_BuscadorActionPerformed(evt);
-            }
-        });
-        txt_Buscador.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txt_BuscadorKeyTyped(evt);
-            }
-        });
-
         btnagregar.setText("Agregar");
         btnagregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -299,23 +277,17 @@ public class UI_Ventas extends javax.swing.JFrame {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txt_Buscador, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnagregar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cantP)
-                .addContainerGap())
+                .addContainerGap()
+                .addComponent(cantP, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnagregar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(txt_Buscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnagregar)
                     .addComponent(cantP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(121, Short.MAX_VALUE))
@@ -629,44 +601,12 @@ public class UI_Ventas extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_BuscadorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_BuscadorKeyTyped
-        
-         
-        String[] registros = new String[5];
-        String[] titulos = {"ID", "Nombre","Precio c/u","Cantidad"};
-        modelo= new DefaultTableModel(null,titulos);
-        try {
-            
-            String orden="SELECT * FROM public.producto\n" +
-                         "where nombre like '%"+txt_Buscador.getText()+"%'\n" +
-                         "or id_producto like '%"+txt_Buscador.getText()+"%';";
-        Connection conex= enlace.conexion();
-            Statement st = conex.createStatement();
-            ResultSet rs = st.executeQuery(orden);
-            
-            while(rs.next()){
-                registros[0] = rs.getString("id_producto");
-                registros[1] = rs.getString("nombre");
-                registros[2] = rs.getString("precio");
-                registros[3] = rs.getString("cantidad");
-                modelo.addRow(registros);
-            }
-            table_bodega.setModel(modelo);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-        
-                
-        
-    }//GEN-LAST:event_txt_BuscadorKeyTyped
-
     private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
         
      
-        if((table_bodega.getSelectedRowCount()>0)&&(Integer.parseInt(cantP.getValue().toString())!= 0)){
+        if((table_bodega.getSelectedRowCount()!=-1)&&(Integer.parseInt(cantP.getValue().toString())!= 0)){
             int venta = Integer.parseInt(cantP.getValue().toString());
             if(venta<=obtenerCantidadB()){
-          
                 agregarVenta();
                 letrasFactura();
           
@@ -702,10 +642,10 @@ public class UI_Ventas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnsalirActionPerformed
 
     private void btnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnimprimirActionPerformed
-            Factura factura = new Factura(txt_cliente.getText(), Fechas.fechaBD(), this.articulos,this.totalPago, txt_rtn.getText());
+            Factura factura = new Factura(txt_cliente.getText(), Fechas.fechaBD(), this.articulos, this.totalPago, txt_rtn.getText());
             BdOption enlace = new BdOption();
             String mensaje = enlace.ingresarFactura(factura);
-            Factura.formatofactura(datosFa, String.valueOf(this.totalPago),txt_cliente.getText(), txt_rtn.getText() , Fechas.fechaBD(), mensaje);
+            Factura.formatofactura(datosFa, String.valueOf(this.totalPago), txt_cliente.getText(), txt_rtn.getText() , Fechas.fechaBD(), mensaje);
            UI_Cliente fram = new UI_Cliente();
        fram.setVisible(true);
        fram.setLocationRelativeTo(null);
@@ -713,10 +653,6 @@ public class UI_Ventas extends javax.swing.JFrame {
         dispose();
             
     }//GEN-LAST:event_btnimprimirActionPerformed
-
-    private void txt_BuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_BuscadorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_BuscadorActionPerformed
 
     
     public static void main(String args[]) {
@@ -764,7 +700,6 @@ public class UI_Ventas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -779,7 +714,6 @@ public class UI_Ventas extends javax.swing.JFrame {
     private javax.swing.JTable jTable2;
     private javax.swing.JTable table_bodega;
     private javax.swing.JTable table_venta;
-    private javax.swing.JTextField txt_Buscador;
     private javax.swing.JLabel txt_PagoTot;
     private javax.swing.JLabel txt_Privilegio;
     private javax.swing.JLabel txt_SubTo;

@@ -141,6 +141,11 @@ public class UI_Login extends javax.swing.JFrame {
         int dec;
         int tipo;
         
+        /*  1111    pass 2222   vendedor
+            2222    pass 3333   vendedor
+            3333    pass 4444   gerente
+            4444    pass 5555   gerente*/
+        
         id=txt_usuario.getText();
         contra = txt_contra.getText();
         
@@ -171,7 +176,6 @@ public class UI_Login extends javax.swing.JFrame {
             
     private void bt_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_salirActionPerformed
          dispose();
-         JOptionPane.showMessageDialog(null, "Hasta Luego");
     }//GEN-LAST:event_bt_salirActionPerformed
 
     private void txt_usuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_usuarioKeyTyped

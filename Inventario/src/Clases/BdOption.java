@@ -165,8 +165,7 @@ public class BdOption {
             con.executeUpdate(orden);
             //JOptionPane.showMessageDialog(null, "Guardado Con EXITO");
             
-            orden = "SELECT numfac \n" +
-                           "FROM public.factura WHERE nombre='"+factura.getNombrecliente()+"';";
+            orden = "SELECT numfac FROM public.factura WHERE nombre='"+factura.getNombrecliente()+"';";
             
             ResultSet rs = con.executeQuery(orden);
             rs.next();
